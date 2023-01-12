@@ -1,0 +1,137 @@
+
+  <div class="row">
+    <div class="col-xxxl-9 col-xxl-8 col-lg-7 col-md-6">
+        <nb-card>
+            <nb-card-header>Google Maps</nb-card-header>
+            <nb-card-body>
+              <google-map [center]="position" [zoom]="15" width="100%" height="36.5625rem" 
+              (mapDragend)="updateInfo()" (zoomChanged)="updateInfo()">
+                <!-- <map-marker-clusterer> -->
+                    <!-- <map-marker 
+                    *ngFor="let marker of markers" 
+                        [latitude]="marker.lat" 
+                        [position]="{ lat: 51.778418, lng: 7.809007 }" 
+                        [longitude]="marker.lng"
+                        (mapClick)="onMarkerClick()" [icon]="getIcon()">    
+                            <map-info-window #infoWindow>
+                                {{ marker.label }}
+                        </map-info-window>
+                    </map-marker>       -->
+                    <!-- <map-marker 
+                    *ngFor="let marker of markers" 
+                        [position]="marker.position" 
+                        (mapClick)="onMarkerClick()" [icon]="getIcon()">    
+                        <map-info-window>
+                                {{ marker.label }}
+                        </map-info-window>
+                    </map-marker>   -->
+                <!-- </map-marker-clusterer> -->
+        
+                <map-marker #somemarker="mapMarker"
+                *ngFor="let marker of sensorInfo" 
+                    [position]="marker.position" 
+                    [icon]="getIcon(marker)"
+                    (mapClick)="openInfoWindow(somemarker, marker)">    
+                    <!-- <map-info-window [infoWindow]="true">
+                        {{marker.label}}
+                    </map-info-window> -->
+                    <map-info-window *ngIf='infoFlg'><div [innerHTML]="infoContent"></div></map-info-window>
+                </map-marker>  
+                <!-- <markers>
+                    <map-marker 
+                    *ngFor="let marker of markers" 
+                      [latitude]="marker.lat" 
+                      [longitude]="marker.lng">    
+                          <map-info-window #infoWindow>
+                              {{ marker.label }}
+                        </map-info-window>
+                    </map-marker>
+        
+                    <marker idKey="marker.id" ng-repeat="marker in vm.map.markers" coords="marker.coords" options="marker.options">
+                        <marker-label content="marker.name" anchor="2 0" class="marker-labels"/>
+                    </marker>
+                </markers> -->
+                <!-- <map-marker [position]="position" [clickable]="true" (mapClick)="onMarkerClick()" [icon]="getIcon()"></map-marker>
+                <map-marker [position]="{ lat: 51.778418, lng: 7.809007 }" [clickable]="true" (mapClick)="onMarkerClick()" [icon]="getIcon()"></map-marker>
+                <map-marker [position]="{ lat: 51.878418, lng: 7.809007 }" [clickable]="true" (mapClick)="onMarkerClick()" [icon]="getIcon()"></map-marker> -->
+                <map-kml-layer [url]="kmlUrl"></map-kml-layer>
+              </google-map>
+            </nb-card-body>
+        </nb-card>
+      </div>
+
+    <div class="col-xxxl-3 col-xxl-4 col-lg-5 col-md-6">
+        <div class="row">
+            <div class="col">
+                <nb-card>
+                    <nb-card-body>
+                        <button nbButton hero primary status="success" (click)="updateInfo()">
+                            更新
+                        </button>
+                        <button nbButton hero primary status="success" (click)="addJson()">
+                            Load
+                        </button>
+                    </nb-card-body>
+                </nb-card>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <nb-card>
+                    <nb-card-body>
+                        <div class="validation-checkboxes">
+                            <nb-checkbox status="success" [(checked)]="infoFlg">地図上にタグ（センサ）を表示する</nb-checkbox>
+                        </div>
+                    </nb-card-body>
+                </nb-card>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <nb-card>
+                    <nb-card-body>
+                        <nb-radio-group [(value)]="radioGroupValue" status="success">
+                            <nb-radio
+                              [value]="'1'">
+                              ピンと楕円
+                            </nb-radio>
+                            <nb-radio
+                              [value]="'2'">
+                              アイコン
+                            </nb-radio>
+                        </nb-radio-group>
+                    </nb-card-body>
+                </nb-card>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <nb-card class="list-card" size="small">
+                    <nb-card-header>センサー情報</nb-card-header>
+                    <nb-list>
+                        <nb-list-item *ngFor="let item of sensorInfo">
+                            <ul class="info_ul">
+                                <li class="info_li">
+                                    <span class="info_span">センサID：</span>
+                                    <span>{{item.ID}}</span>
+                                </li>
+                                <li class="info_li">
+                                    <span class="info_span">緯度：</span>
+                                    <span>{{item.position.lat}}</span>
+                                </li>
+                                <li class="info_li">
+                                    <span class="info_span">経度：</span>
+                                    <span>{{item.position.lng}}</span>
+                                </li>
+                                <li class="info_li">
+                                    <span class="info_span">測定値：</span>
+                                    <span>{{item.value}}</span>
+                                </li>
+                             </ul>
+                        </nb-list-item>
+                    </nb-list>
+                </nb-card>
+            </div>
+        </div>
+    </div>
+  </div>
